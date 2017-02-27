@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>server-mock使用说明</title>
+    <style>
+        .container {
+            width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>新闻列表</h1>
+        <ul>
+            <li>十八大来 习近平每年首次调研背后有盘棋</li>
+            <li>中央通知全军和武警认真学习习近平讲话 扶贫</li>
+            <li>李克强签署国务院令 公布"残疾人康复条例"</li>
+            <li>799个审批工作日缩为30个 "万里审批图"成历史</li>
+            <li>韩媒:乐天同意转让地皮供部署萨德 中方回应</li>
+        </ul>
+        <button id="change">换一批</button>
+    </div>
+
+    <script>
+        var btn = document.getElementById("change");
+
+        var xhr = new XMLHttpRequest();
+        btn.addEventListener("click", function() {
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    newsFormat(JSON.parse(xhr.responseText));
+                }
+            }
+            xhr.open('get', '/change', true);
+            xhr.send();
+        });
+
+        function newsFormat(news) {
+            var format = '';
+            for (var i = 0; i < news.length; i++) {
+                format += '<li>' + news[i] + '</li>';
+            }
+            var ul = document.querySelector(".container > ul");
+            ul.innerHTML = format;
+        }
+    </script>
+</body>
+
+</html>
