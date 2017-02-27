@@ -52,6 +52,16 @@ app.get('/change', function(req, res) {
     }
     res.send(data);
 });
+
+app.get('/getmore', function(req, res) {
+    var nodeCount = Number(req.query.childCount);
+    console.log(nodeCount);
+    var content = []
+    for (var i = nodeCount + 1; i <= nodeCount + 5; i++) {
+        content.push('内容' + i);
+    }
+    res.send(content);
+});
 /**
  * 发送 POST 请求， 有参数
  * POST /comment

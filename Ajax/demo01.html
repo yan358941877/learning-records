@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>测试ajax</title>
+    <style>
+        body,
+        div,
+        ul,
+        li {
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container li {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        .container li:hover {
+            background: green;
+            cursor: pointer;
+            color: #fff;
+        }
+        
+        .box {
+            text-align: center;
+        }
+        
+        .box a {
+            display: inline-block;
+            width: 80px;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid #E27272;
+            text-decoration: none;
+            color: #E27272;
+            border-radius: 3px;
+            background: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul>
+            <li>内容1</li>
+            <li>内容2</li>
+        </ul>
+        <div class="box">
+            <a href="#" id="more">获取更多</a>
+        </div>
+    </div>
+    <script>
+        var more = document.getElementById("more");
+        var ul = document.querySelector(".container > ul");
+        var xhr = new XMLHttpRequest();
+
+        function getMoreContent(event) {
+            var child = ul.childElementCount;
+            //console.log(child);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    insertHTML(JSON.parse(xhr.responseText));
+                }
+            }
+            var url = '/getmore?childCount=' + child;
+            xhr.open('get', url, true);
+            xhr.send();
+        }
+
+        function insertHTML(data) {
+            var i = 0;
+            for (i = 0; i < data.length; i++) {
+                var element = document.createElement('li');
+                element.innerText = data[i];
+                ul.appendChild(element);
+            }
+        }
+        more.addEventListener('click', getMoreContent);
+    </script>
+</body>
+
+</html>

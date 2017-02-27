@@ -85,11 +85,9 @@ document.querySelector('#btn').addEventListener('click', function(){
 });
 ```
 
-
+### server-mock的使用
 
 * npm install -g server-mock 安装工具
 * mock init 初始化范例
 * mock start 启动服务器
 
-post请求,send()中的字符串是key-value形式的,发送到服务器端的实际上是一个对象
-post请求需要设置HTTP Header
