@@ -1,0 +1,23 @@
+### 图片的懒加载
+
+#### 如何加载图片
+
+* 需要加载的时候将图片地址填入img标签的src
+* 自定义属性 data-src="图片地址"
+* url = img.getAttribute('data-src')
+* img.setAttribute('src', url)
+
+#### 如何判断用户看到图片(待加载图片位置在用户视线范围内)
+
+* 关键:窗口大小,文档(document)高度(大于窗口高度),滚动距离
+* 元素出现的条件 window.Height + scrollTop(滑动距离) >= offsetTop(元素距bodyu顶端距离)
+* 元素出现在窗口顶端的条件 scrollTop = offsetTop
+* 元素底端在窗口顶端的条件 scrollTop = offsetTop + nodeHeight
+
+#### 细节问题
+
+* 当页面加载完毕时就应该有一部分图片显示
+* 请求的图片还没到来对于页面的滚动不再发出新的请求
+* 当服务器中已经没有更多的资源时,就不再发出新的请求
+* 当页面滑动时,对每个图片进行判断,判断其是否出现在window中,会浪费计算资源,对于已经出现的图片,添加新的class,在判断过程中滤除这些
+
