@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        div,
+        ul,
+        li,
+        input,
+        label {
+            padding: 0;
+            margin: 0;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            position: relative;
+        }
+        
+        input[name=carousel] {
+            display: none;
+        }
+        
+        .carousel {
+            height: 300px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .carousel li {
+            position: absolute;
+            display: none;
+        }
+        
+        .carousel li img {
+            width: 200px;
+            height: 300px;
+        }
+        
+        .bullet {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .bullet li label {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            line-height: 20px;
+            text-align: center;
+            background: #999;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        input[name=carousel]:nth-child(1):checked~.carousel>li:nth-child(1),
+        input[name=carousel]:nth-child(2):checked~.carousel>li:nth-child(2),
+        input[name=carousel]:nth-child(3):checked~.carousel>li:nth-child(3),
+        input[name=carousel]:nth-child(4):checked~.carousel>li:nth-child(4) {
+            display: block;
+            animation: slide 2s;
+        }
+        
+        input[name=carousel]:nth-child(1):checked~.bullet>li:nth-child(1) label,
+        input[name=carousel]:nth-child(2):checked~.bullet>li:nth-child(2) label,
+        input[name=carousel]:nth-child(3):checked~.bullet>li:nth-child(3) label,
+        input[name=carousel]:nth-child(4):checked~.bullet>li:nth-child(4) label {
+            background: #333;
+            color: #fff;
+        }
+        
+        @keyframes slide {
+            from {
+                opacity: 0.3;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <input type="radio" name="carousel" id="img01" checked>
+        <input type="radio" name="carousel" id="img02">
+        <input type="radio" name="carousel" id="img03">
+        <input type="radio" name="carousel" id="img04">
+        <ul class="carousel">
+            <li>
+                <a href="#"><img src="http://ossweb-img.qq.com/images/lol/act/a20150914newskin/card-fiora.jpg" alt=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="http://ossweb-img.qq.com/images/lol/act/a20150914newskin/card-leona.jpg" alt=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="http://ossweb-img.qq.com/images/lol/act/a20150914newskin/card-lucian.jpg" alt=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="http://ossweb-img.qq.com/images/lol/act/a20150914newskin/card-yi.jpg" alt=""></a>
+            </li>
+        </ul>
+
+        <ul class="bullet">
+            <li><label for="img01">1</label></li>
+            <li><label for="img02">2</label></li>
+            <li><label for="img03">3</label></li>
+            <li><label for="img04">4</label></li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -32,8 +32,14 @@
         
         .carousel {
             position: absolute;
+            width: 1200px;
             left: 0;
-            width: 800px;
+        }
+        
+        .carousel:after {
+            content: '';
+            display: block;
+            clear: both;
         }
         
         .carousel>li {
@@ -69,14 +75,14 @@
             margin-top: -15px;
         }
         
-        .carousel-index {
+        .bullet {
             position: absolute;
             bottom: 6px;
             width: 200px;
             text-align: center;
         }
         
-        .carousel-index li {
+        .bullet li {
             width: 20px;
             height: 5px;
             background: #fff;
@@ -86,7 +92,7 @@
             cursor: pointer;
         }
         
-        .carousel-index .active {
+        .bullet .active {
             background: #666;
         }
     </style>
@@ -112,7 +118,7 @@
 
         <a href="#" class="btn btn-pre">&lt;</a>
         <a href="#" class="btn btn-next">&gt;</a>
-        <ul class="carousel-index">
+        <ul class="bullet">
             <li class="active"></li>
             <li></li>
             <li></li>
@@ -123,32 +129,68 @@
     <script>
         // 控制其left值来操纵图片滑动
         var $carousel = $('.carousel');
-        var carouselLen = $('.carousel li').length;
+        var $imgItem = $('.carousel li');
+        var imgNum = $imgItem.length;
+        var imgWidth = $imgItem.eq(0).width();
         var $btnPre = $('.btn-pre');
         var $btnNext = $('.btn-next');
-        var index = 0;
-        var distance = '';
+        var imgIndex = 1;
+        var $bullet = $('.bullet');
+        var $bulletItem = $('.bullet li');
+        $carousel.append($imgItem.first().clone());
+        $carousel.prepend($imgItem.last().clone());
+        $carousel.css('left', -1 * imgWidth + 'px');
+        console.log(imgNum);
+
+        var animateFinish = true;
 
         function nextImg() {
-            index = (index + 1) % carouselLen;
-            distance = index * (-200) + "px";
-
-            //$carousel.css('left', distance + "px");
+            if (!animateFinish) {
+                return;
+            }
+            animateFinish = false;
             $carousel.animate({
-                left: distance
-            }, 1000);
+                left: "-=200px"
+            }, 1000, function() {
+                imgIndex++;
+                if (imgIndex > imgNum) {
+                    imgIndex = 1;
+                    $carousel.css('left', -1 * imgWidth + 'px');
+                }
+                $bulletItem.removeClass('active');
+                $bulletItem.eq(imgIndex - 1).addClass('active');
+
+                animateFinish = true;
+            });
         }
 
         function preImg() {
-            index = (carouselLen + index - 1) % carouselLen;
-            distance = index * (-200) + "px";
-            // $carousel.css('left', distance + "px");
+            if (!animateFinish) {
+                return;
+            }
+            animateFinish = false;
             $carousel.animate({
-                left: distance
-            }, 1000);
+                left: "+=200px"
+            }, 1000, function() {
+                imgIndex--;
+                if (imgIndex <= 0) {
+                    imgIndex = imgNum;
+                    $carousel.css('left', -1 * imgNum * imgWidth + 'px');
+                }
+                $bulletItem.removeClass('active');
+                $bulletItem.eq(imgIndex - 1).addClass('active');
+                animateFinish = true;
+            });
         }
         $btnNext.on('click', nextImg);
         $btnPre.on('click', preImg);
+        $bullet.on('click', 'li', function(event) {
+            $bulletItem.removeClass('active');
+            $(this).addClass('active');
+            imgIndex = $(this).index() + 1;
+            $carousel.css('left', -1 * imgIndex * imgWidth + 'px');
+
+        })
     </script>
 
 

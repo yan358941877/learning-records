@@ -33,11 +33,15 @@
         .carousel {
             position: absolute;
             left: 0;
-            width: 800px;
+            width: 200px;
         }
         
         .carousel>li {
-            float: left;
+            /*float: left;*/
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
         }
         
         a.btn {
@@ -123,32 +127,57 @@
     <script>
         // 控制其left值来操纵图片滑动
         var $carousel = $('.carousel');
+        var $carouselItem = $('.carousel li');
         var carouselLen = $('.carousel li').length;
+        var $bullet = $('.carousel-index li');
         var $btnPre = $('.btn-pre');
         var $btnNext = $('.btn-next');
         var index = 0;
-        var distance = '';
+        var antimateFinish = true;
+
+        $carouselItem.eq(index).css('display', 'block');
 
         function nextImg() {
+            if (!antimateFinish) {
+                return;
+            }
+            antimateFinish = false;
+            $carouselItem.eq(index).fadeOut(500);
             index = (index + 1) % carouselLen;
-            distance = index * (-200) + "px";
-
-            //$carousel.css('left', distance + "px");
-            $carousel.animate({
-                left: distance
-            }, 1000);
+            $carouselItem.eq(index).fadeIn(500);
+            $bullet.removeClass('active');
+            $bullet.eq(index).addClass('active');
+            antimateFinish = true;
         }
 
         function preImg() {
+            if (!antimateFinish) {
+                return;
+            }
+            antimateFinish = false;
+            $carouselItem.eq(index).fadeOut(500);
             index = (carouselLen + index - 1) % carouselLen;
-            distance = index * (-200) + "px";
-            // $carousel.css('left', distance + "px");
-            $carousel.animate({
-                left: distance
-            }, 1000);
+            $carouselItem.eq(index).fadeIn(500);
+            $bullet.removeClass('active');
+            $bullet.eq(index).addClass('active');
+            antimateFinish = true;
         }
         $btnNext.on('click', nextImg);
         $btnPre.on('click', preImg);
+
+        $('.carousel-index').on('click', 'li', function(event) {
+            if (!antimateFinish) {
+                return;
+            }
+            antimateFinish = false;
+            $bullet.removeClass('active');
+            $(this).addClass('active');
+            $carouselItem.eq(index).fadeOut(500);
+            index = $(this).index();
+            $carouselItem.eq(index).fadeIn(500);
+            antimateFinish = true;
+        });
+        setInterval(nextImg, 2000);
     </script>
 
 
