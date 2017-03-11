@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>瀑布流布局</title>
+    <style>
+        .waterfull {
+            margin: 10px auto;
+            position: relative;
+        }
+        
+        .item {
+            position: absolute;
+            width: 200px;
+            margin: 10px;
+            transform: all 1s;
+        }
+        
+        .h1 {
+            height: 150px;
+            background: #f00;
+        }
+        
+        .h2 {
+            height: 170px;
+            background: #0f0;
+        }
+        
+        .h3 {
+            height: 190px;
+            background: #00f;
+        }
+        
+        .h4 {
+            height: 210px;
+            background: #ff0;
+        }
+        
+        .h5 {
+            height: 230px;
+            background: #0ff;
+        }
+        
+        .h6 {
+            height: 260px;
+            background: #f0f;
+        }
+        
+        .h7 {
+            height: 290px;
+            background: #08f;
+        }
+        
+        .h8 {
+            height: 320px;
+            background: #80f;
+        }
+        
+        .h9 {
+            height: 350px;
+            background: #f80;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="waterfull">
+        <div class="item h4">1</div>
+        <div class="item h6">2</div>
+        <div class="item h3">3</div>
+        <div class="item h1">4</div>
+        <div class="item h9">5</div>
+        <div class="item h4">6</div>
+        <div class="item h2">7</div>
+        <div class="item h8">8</div>
+        <div class="item h6">9</div>
+        <div class="item h5">10</div>
+        <div class="item h3">11</div>
+        <div class="item h7">12</div>
+        <div class="item h5">13</div>
+        <div class="item h9">14</div>
+        <div class="item h2">15</div>
+        <div class="item h6">16</div>
+        <div class="item h4">17</div>
+        <div class="item h8">18</div>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        function waterfull() {
+            var colHeight = [];
+            var $waterfull = $(".waterfull");
+            var $item = $(".item");
+            var itemWidth = $item.outerWidth(true);
+            var colCount = Math.floor($waterfull.innerWidth() / $item.outerWidth(true));
+            for (var i = 0; i < colCount; i++) {
+                colHeight[i] = 0;
+            }
+            for (i = 0; i < $item.length; i++) {
+                var minHeight = Math.min.apply(null, colHeight);
+                var pos = colHeight.indexOf(minHeight);
+                $item.eq(i).css({
+                    left: pos * itemWidth,
+                    top: minHeight
+                });
+                colHeight[pos] += $item.eq(i).outerHeight(true);
+            }
+        }
+        waterfull();
+        $(window).resize(function() {
+            waterfull();
+        });
+    </script>
+</body>
+
+</html>
