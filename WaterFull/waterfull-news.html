@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .newsCT ul {
+            margin: 10px auto;
+            width: 905px;
+            position: relative;
+        }
+        
+        .news {
+            width: 280px;
+            border: 1px solid #ddd;
+            margin: 10px;
+            list-style: none;
+            position: absolute;
+        }
+        
+        .news a {
+            text-decoration: none;
+        }
+        
+        .news img {
+            width: 260px;
+            margin: 10px;
+        }
+        
+        .news h4 {
+            margin: 0px 10px;
+            border-bottom: 1px solid #ddd;
+            color: #000;
+        }
+        
+        .news p {
+            margin: 10px 10px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="newsCT">
+        <ul>
+
+        </ul>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        // 设置总列数,也可以根据每条新闻的宽度和行宽度计算得出
+        var cols = 3;
+        var $newsCT = $('.newsCT ul');
+        // 一行新闻的宽度
+        var containerWidth = $newsCT.innerWidth();
+        // 每列的高度总和,初始化为0
+        var colsHeight = [];
+        for (var i = 0; i < cols; i++) {
+            colsHeight[i] = 0;
+        }
+        var page = 1;
+        var newsCount = 0;
+        var addNewsFlag = true;
+
+        // 展示数据/拼接成dom节点插入到页面中
+        function receiveNews(res) {
+            var datalen = res.data.length;
+            if (datalen < 3) {
+                var news = '<li class="end">' +
+                    '<h4>没有更多内容</h4>' +
+                    '</li>';
+                $newsCT.append($(news));
+                showNews(1);
+            }
+            $.each(res.data, function(index, data) {
+                var news = '<li class="news">' +
+                    '<a href="#">' +
+                    '<img src=' + data.img_url + '>' +
+                    '<h4>' + data.name + '</h4>' +
+                    '<p>' + data.short_intro + '</p>' +
+                    '</a>' +
+                    '</li>';
+                $newsCT.append($(news));
+            });
+            // 传入插入了几条"news"
+            showNews(datalen);
+        }
+
+        // 排列数据:使用瀑布流布局,给在上一步中新添加的元素重新设定位置
+        function showNews(datalen) {
+            var $news = $('.news');
+            for (var i = newsCount; i < newsCount + datalen; i++) {
+                (function() {
+                    var $item = $news.eq(i);
+                    // 当"news"中的image加载完成后,再计算该"news"的高度和宽度,如果image没有加载完毕,计算出来的高度不一定正确
+                    $item.find("img").on('load', function() {
+                        var minHeight = Math.min.apply(null, colsHeight);
+                        var minIndex = colsHeight.indexOf(minHeight);
+                        var itemHeight = $item.outerHeight(true);
+                        var itemWidth = $item.outerWidth(true);
+                        $item.css({
+                            top: minHeight + 'px',
+                            left: minIndex * itemWidth + 'px'
+                        })
+                        colsHeight[minIndex] += itemHeight;
+                    })
+                })();
+            }
+            newsCount = newsCount + datalen;
+            addNewsFlag = true;
+        }
+        // 获取数据: 使用JSONP的方式获取数据,参数中的jsoncallback指定回调函数,获取数据后立即执行receiveNews
+        function getNews(page) {
+            if (addNewsFlag) {
+                addNewsFlage = false;
+                var src = "http://platform.sina.com.cn/slide/album_tech?jsoncallback=receiveNews&app_key=1271687855&num=3&page=" + page;
+                var script = '<script src=' + src + '><\/script>';
+                $(document.body).append($(script));
+            }
+
+        }
+        // 一开始先加载30条数据
+        function init() {
+            while (page < 10) {
+                getNews(page);
+                page++;
+            }
+        }
+
+        function check() {
+            // 窗口高度
+            var windowHeight = $(window).height();
+            // 滑动距离
+            var scrollHeight = $(document).scrollTop();
+            // 最高的那列的高度
+            var contentHeight = Math.max.apply(null, colsHeight);
+            // 由于ul设置着margin-top:10px; 所以当滑动到页面最底端的时候,contentHeight - scrollHeight + 10 = windowHeight,因此可以使用这个条件来判断是否滑动到了底端
+            if (contentHeight - scrollHeight < windowHeight) {
+                // 再获取新的news
+                getNews(page++);
+            }
+        }
+        init();
+        $(window).on('scroll', check);
+    </script>
+</body>
+
+</html>

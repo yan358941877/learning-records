@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>木桶布局</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        .barrel-ct {
+            width: 1000px;
+            margin: 10px auto;
+        }
+        
+        .barrel-row {
+            margin-bottom: 10px;
+        }
+        
+        .barrel-row:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+        
+        .barrel-item {
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="barrel-ct">
+
+        </div>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        var imgIndex = 0;
+        var $barrelCT = $('.barrel-ct');
+        var rowWidth = $('.barrel-ct').innerWidth();
+        var imglist = [];
+        var imgUrl = [];
+        var iniHeight = 100;
+        var baseArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+
+        function loadImage() {
+            var urls = getImage(); // 获取图片url列表
+            for (var i = 0; i < urls.length; i++) {
+                (function() {
+                    var img = new Image();
+                    img.src = urls[i];
+
+                    img.onload = function() {
+                        var originWidth = img.width,
+                            originHeight = img.height,
+                            ratio = originWidth / originHeight;
+                        var imageInfo = {
+                            target: $(img),
+                            width: iniHeight * ratio,
+                            height: iniHeight,
+                            ratio: ratio
+                        };
+                        console.log(ratio);
+                        insertRow(imageInfo);
+                    }
+                })();
+
+            }
+            /*
+            $.each(urls, function(idx, url) {
+                var img = new Image();
+                img.src = url;
+
+                img.onload = function() {
+                    var originWidth = img.width,
+                        originHeight = img.height,
+                        ratio = originWidth / originHeight;
+                    var imageInfo = {
+                        target: $(img),
+                        width: iniHeight * ratio,
+                        height: iniHeight,
+                        ratio: ratio
+                    };
+                    console.log(ratio);
+                    insertRow(imageInfo);
+                }
+            });
+            */
+        }
+
+        function insertRow(imageInfo) {
+            var widthSum = 0;
+            for (var i = 0; i < imglist.length; i++) {
+                widthSum += imglist[i].width
+            }
+            var restLength = rowWidth - widthSum;
+            if (restLength <= imageInfo.width) {
+                showImage(restLength);
+                imglist = [];
+                imglist.push(imageInfo);
+            } else {
+                imglist.push(imageInfo);
+            }
+        }
+
+        function showImage(restLength) {
+            var $barrelRow = $('<div class="barrel-row"></div>');
+
+            console.log(restLength);
+            for (var i = 0; i < imglist.length; i++) {
+                //console.log(imglist[i].width);
+                imglist[i].width += imglist[i].width * restLength / (rowWidth - restLength);
+                imglist[i].height = imglist[i].width / imglist[i].ratio;
+                var $barrelItem = $(' <div class="barrel-item"></div');
+                var $img = imglist[i].target;
+                $img.height(imglist[i].height);
+                $barrelItem.append($img);
+                $barrelRow.append($barrelItem);
+            }
+            $barrelCT.append($barrelRow);
+        }
+
+        function getImage() {
+            var color, width, height, src;
+            var urls = [];
+            for (var i = 0; i < 100; i++) {
+                color = 'bg=' + baseArray[Math.floor(Math.random() * 16)] + baseArray[Math.floor(Math.random() * 16)] + baseArray[Math.floor(Math.random() * 16)] + baseArray[Math.floor(Math.random() * 16)] + baseArray[Math.floor(Math.random() * 16)] + baseArray[Math.floor(Math.random() * 16)];
+                width = Math.floor(Math.random() * 100 + 50);
+                height = Math.floor(Math.random() * 30 + 50);
+                src = "https://placeholdit.imgix.net/~text?txtsize=13&" + color + "&txtclr=ffffff&txt=146%C3%9751&w=" + width + "&h=" + height;
+                urls.push(src);
+            }
+            return urls;
+        }
+        loadImage();
+    </script>
+</body>
+
+</html>
