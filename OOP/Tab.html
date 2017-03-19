@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="[Tab组件]" />
+    <meta charset="utf-8">
+    <title>Tab</title>
+    <style>
+        body,
+        div,
+        ul,
+        li p {
+            padding: 0;
+            margin: 0;
+        }
+        
+        .tab-container li {
+            list-style: none;
+        }
+        
+        .tab-title a {
+            text-decoration: none;
+            color: #900;
+        }
+        
+        .clearfix:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+        
+        .tab-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px 20px;
+            margin: 20px auto;
+            height: 150px;
+            min-width: 400px;
+            max-width: 600px;
+        }
+        
+        .tab-title {
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-title li {
+            float: left;
+            display: inline-block;
+            width: 80px;
+            padding: 10px 20px;
+            text-align: center;
+            cursor: pointer;
+            color: #600;
+        }
+        
+        .tab-title .active {
+            position: relative;
+            top: 1px;
+            border: 1px solid #ddd;
+            border-bottom: 1px solid #fff;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .tab-title .active {
+            color: #666;
+        }
+        
+        .tab-content {
+            padding: 20px 10px;
+        }
+        
+        .tab-content li {
+            display: none;
+        }
+        
+        .tab-content li.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tab-container">
+        <ul class="tab-title clearfix">
+            <li class="active">选项1</li>
+            <li>选项2</li>
+            <li>选项3</li>
+        </ul>
+        <ul class="tab-content">
+            <li class="active">内容1</li>
+            <li>内容2</li>
+            <li>内容3</li>
+        </ul>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        function tabModule(tab) {
+            this.tab = tab;
+            this.tabTitle = tab.querySelector(".tab-title");
+            this.tabContent = tab.querySelectorAll(".tab-content li");
+        }
+        tabModule.prototype = {
+            constructor: tabModule,
+            bind: function() {
+                this.tabTitle.addEventListener("click", this.clickTab.bind(this));
+            },
+            clickTab: function(event) {
+                var target = event.target;
+                var titleItem = this.tabTitle.children;
+                Array.prototype.forEach.call(titleItem, function(item) {
+                    item.classList.remove("active");
+                })
+                Array.prototype.forEach.call(this.tabContent, function(item) {
+                    item.classList.remove("active");
+                })
+                var index = Array.prototype.indexOf.call(titleItem, target);
+                target.classList.add("active");
+                this.tabContent[index].classList.add("active");
+            }
+        }
+        var tab = document.querySelector(".tab-container");
+        var tabMo = new tabModule(tab);
+        tabMo.bind();
+        /*
+        var tab = document.querySelector(".tab-container");
+        var tabTitle = tab.querySelector(".tab-title");
+        var tabContent = tab.querySelectorAll(".tab-content li");
+        function clickTab(event){
+          var target = event.target;
+          var titleItem = tabTitle.children;
+          Array.prototype.forEach.call(titleItem, function(item){
+            item.classList.remove("active");
+          })
+          Array.prototype.forEach.call(tabContent, function(item){
+            item.classList.remove("active");
+          })
+          var index = Array.prototype.indexOf.call(titleItem, target);
+          target.classList.add("active");
+          tabContent[index].classList.add("active");
+        }
+        tabTitle.addEventListener("click", clickTab);
+        */
+    </script>
+
+</body>
+
+</html>

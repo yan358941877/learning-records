@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="[轮播]" />
+    <meta charset="utf-8">
+    <title>Carousel 轮播</title>
+    <style>
+        body,
+        div,
+        ul,
+        li,
+        a,
+        img {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .carousel-container {
+            width: 1000px;
+            height: 510px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .carousel {
+            position: absolute;
+            width: 7000px;
+            left: 0;
+        }
+        
+        .carousel li,
+        .preview li {
+            list-style: none;
+            float: left;
+        }
+        
+        .carousel li a {
+            text-decoration: none;
+        }
+        
+        .carousel img {
+            width: 1000px;
+        }
+        
+        .next,
+        .pre {
+            font-size: 2em;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            margin-top: -0.5em;
+            display: block;
+            width: 1.25em;
+            height: 1.25em;
+            line-height: 1.25em;
+            border-radius: 50%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+        
+        .pre {
+            left: 1em;
+        }
+        
+        .next {
+            right: 1em;
+        }
+        
+        .preview {
+            position: absolute;
+            width: 500px;
+            bottom: 1em;
+            left: 50%;
+            margin-left: -250px;
+        }
+        
+        .preview img {
+            width: 100px;
+        }
+        
+        .preview li {
+            float: left;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .preview .unactive {
+            width: 100px;
+            height: 51px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel-container">
+        <div class="carousel-window">
+            <ul class="carousel">
+                <li>
+                    <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big22008.jpg" alt=""></a>
+                </li>
+                <li>
+                    <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big17008.jpg" alt=""></a>
+                </li>
+                <li>
+                    <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg" alt=""></a>
+                </li>
+                <li>
+                    <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big85005.jpg" alt=""></a>
+                </li>
+                <li>
+                    <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big236006.jpg" alt=""></a>
+                </li>
+            </ul>
+            <div class="operate">
+                <span class="next">&gt;</span>
+                <span class="pre">&lt;</span>
+            </div>
+            <div class="preview">
+                <ul>
+                    <li>
+                        <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big22008.jpg" alt=""></a>
+                        <div class=""></div>
+                    </li>
+                    <li>
+                        <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big17008.jpg" alt=""></a>
+                        <div class="unactive"></div>
+                    </li>
+                    <li>
+                        <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg" alt=""></a>
+                        <div class="unactive"></div>
+                    </li>
+                    <li>
+                        <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big85005.jpg" alt=""></a>
+                        <div class="unactive"></div>
+                    </li>
+                    <li>
+                        <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big236006.jpg" alt=""></a>
+                        <div class="unactive"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        function Carousel($carouselWindow) {
+            ///// error 
+            this.$carousel = $carouselWindow.find('.carousel');
+            this.btn_next = $carouselWindow.find('.next');
+            this.btn_pre = $carouselWindow.find('.pre');
+            this.$preview = $carouselWindow.find('.preview');
+            this.$previewImg = this.$preview.find("ul");
+            this.imgWidth = this.$carousel.find('img').innerWidth();
+            this.count = 0;
+        }
+        Carousel.prototype = {
+            constructor: Carousel,
+            init: function() {
+                var first = this.$carousel.children().eq(0).clone(false);
+                var last = this.$carousel.children().eq(this.$carousel.children().length - 1).clone(false);
+                this.$carousel.append(first);
+                last.insertBefore(".carousel li:first-child");
+                this.count = 1;
+                this.$carousel.css("left", -1 * this.imgWidth * this.count + "px");
+
+                this.nextImg();
+                this.preImg();
+                this.preview();
+            },
+            nextImg: function() {
+                var _this = this;
+                this.btn_next.on('click', function(event) {
+                    _this.count++;
+                    _this.$carousel.animate({
+                        "left": -1 * _this.imgWidth * _this.count + "px"
+                    }, 1000, function() {
+                        if (_this.count == 6) {
+                            _this.count = 1;
+                            _this.$carousel.css("left", -1 * _this.imgWidth * _this.count + "px");
+                        }
+                        _this.$preview.find("li div").each(function() {
+                            // 注意:这里的this指的是dom对象,而不是jQuery对象
+                            this.classList.add("unactive");
+                        });
+                        _this.$preview.find("li div").eq(_this.count - 1).removeClass("unactive");
+                    });
+                });
+            },
+            preImg: function() {
+                var _this = this;
+                _this.btn_pre.on('click', function(event) {
+                    _this.count--;
+                    _this.$carousel.animate({
+                        "left": -1 * _this.imgWidth * _this.count + "px"
+                    }, 1000, function() {
+                        if (_this.count == 0) {
+                            _this.count = 5;
+                            _this.$carousel.css("left", -1 * _this.imgWidth * _this.count + "px");
+                        }
+                        _this.$preview.find("li div").each(function() {
+                            this.classList.add("unactive");
+                        });
+                        _this.$preview.find("li div").eq(_this.count - 1).removeClass("unactive");
+                    });
+                });
+            },
+            preview: function() {
+                var _this = this;
+                var $previewImg = _this.$preview.find("ul");
+
+                $previewImg.on('click', 'li', function(event) {
+                    var index = $previewImg.children().index($(this));
+                    _this.count = index + 1;
+                    _this.$carousel.animate({
+                        "left": -1 * _this.imgWidth * _this.count + "px"
+                    }, 1000);
+                    _this.$preview.find("li div").each(function() {
+                        // 注意:这里的this指的是dom对象,而不是jQuery对象
+                        this.classList.add("unactive");
+                    });
+                    _this.$preview.find("li div").eq(_this.count - 1).removeClass("unactive");
+                })
+            }
+        }
+        var carousel = new Carousel($('.carousel-window'));
+        carousel.init();
+    </script>
+
+</body>
+
+</html>

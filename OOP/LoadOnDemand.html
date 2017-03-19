@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="[懒加载]" />
+    <meta charset="utf-8">
+    <title>懒加载</title>
+    <style>
+        body,
+        div,
+        ul,
+        li,
+        a,
+        img {
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container li {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .container a {
+            text-decoration: none;
+        }
+        
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul class="img-list">
+            <li>
+                <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big51006.jpg" data-src=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="http://ossweb-img.qq.com/images/lol/web201310/skin/big245003.jpg" data-src=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big18005.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big78001.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big45008.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big92006.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big117003.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big85006.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big18010.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big412004.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big107002.jpg"></a>
+            </li>
+            <li>
+                <a href="#"><img src="" data-src="http://ossweb-img.qq.com/images/lol/web201310/skin/big421001.jpg"></a>
+            </li>
+        </ul>
+        <p class="flag">正在加载中...</p>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        function LoadImage($container) {
+            this.imgList = $container.find(".img-list");
+            this.flag = $container.find('.flag');
+
+            this.showNum = 2;
+            this.loadSize = 3;
+        }
+        LoadImage.prototype = {
+            constructor: LoadImage,
+            init: function() {
+
+                $(window).scroll(this.isVisible.bind(this));
+                /*
+                注意:在事件处理函数中,this指的是该事件处理函数对应的DOM对象,在这里,事件处理函数中的this指的是window
+                    因为在事件处理函数中不需要以this的方式使用window,因此将isVisible中的this绑定到当前对象,即此时的this
+                    (在向scroll传递参数时,这里的this指的还是当前对象,进入到参数所指的方法中则this指的是window)
+                */
+            },
+            isVisible: function() {
+
+                var windowHeight = $(window).innerHeight();
+                var scrollHeight = $(document).scrollTop();
+                var topHeight = this.flag.offset().top;
+
+                if (windowHeight + scrollHeight > topHeight) {
+                    for (var i = 0; i < this.loadSize; i++) {
+                        var src = this.imgList.find('img').eq(this.showNum + i).attr("data-src");
+                        this.imgList.find('img').eq(this.showNum + i).attr("src", src);
+                    }
+                    this.showNum += this.loadSize;
+                    if (this.showNum > this.imgList.find('img').length) {
+                        this.flag.text("已经加载完毕!!");
+                    }
+                }
+            }
+        }
+        var $container = $('.container');
+        var loadImage = new LoadImage($container);
+        loadImage.init();
+        /*
+        var imgList = $('.container').find(".img-list");
+        var flag = $('.container').find('.flag');
+        var showNum = 2;
+        var loadSize = 3;
+        function isVisible($node){
+          var windowHeight = $(window).innerHeight();
+          var scrollHeight = $(document).scrollTop();
+          var topHeight = $node.offset().top;
+          
+          if(windowHeight + scrollHeight > topHeight){
+            for(var i = 0;i<loadSize ; i++){
+              var src = imgList.find('img').eq(showNum+i).attr("data-src");
+              imgList.find('img').eq(showNum+i).attr("src", src);
+            }
+            showNum+=loadSize;
+            if(showNum > imgList.find('img').length){
+              flag.text("已经加载完毕!!");
+            }
+          }else {
+            return false;
+          }
+        }*/
+    </script>
+</body>
+
+</html>
