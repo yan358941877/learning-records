@@ -8,15 +8,13 @@
 //     out: "index.merge.min.js"
 // })
 ({
-    baseUrl: ".",
+    baseUrl: "./",
     name: "app",
-    path: {
-        lib: 'lib',
-        app: 'app',
-        jquery: 'lib/jquery'
+    paths: {
+        lib: './lib', // 这里的.是以baseUrl为基准的
+        app: './app',
+        jquery: './lib/jquery'
     },
-    // name指明了从哪个js文件开始解析
-
     // 输出目录
     out: "index.merge.min.js"
 })
