@@ -22,9 +22,10 @@ requirejs.config({
 //     console.log($);
 // });
 
-requirejs(['app/Carousel', 'app/GoTop'], function(Carousel, GoTop) {
+requirejs(['jquery', 'app/Carousel', 'app/GoTop', 'app/LoadOnDemand'], function($, Carousel, GoTop, LoadOnDemand) {
 
     var carousel = new Carousel($('.carousel-window'));
     carousel.init();
     var gotop = new GoTop();
+    var loadImg = new LoadOnDemand($('#character .container'));
 })
