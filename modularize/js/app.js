@@ -15,12 +15,13 @@
 requirejs.config({
     baseUrl: './js',
     paths: {
+        lib: './lib', // 这里的.是以baseUrl为基准的
         app: './app',
-        lib: './lib'
+        jquery: './lib/jquery'
     }
 });
 
-requirejs(['lib/jquery', 'app/Carousel', 'app/GoTop', 'app/LoadOnDemand'], function($, Carousel, GoTop, LoadOnDemand) {
+requirejs(['jquery', 'app/Carousel', 'app/GoTop', 'app/LoadOnDemand'], function($, Carousel, GoTop, LoadOnDemand) {
 
     var carousel = new Carousel($('.carousel-window'));
     carousel.init();
@@ -28,7 +29,10 @@ requirejs(['lib/jquery', 'app/Carousel', 'app/GoTop', 'app/LoadOnDemand'], funct
     var loadImg = new LoadOnDemand($('#character .container'));
 });
 
+// requirejs(['jquery', 'app/Carousel', 'app/GoTop', 'app/LoadOnDemand'], function($) {
 
+
+// });
 
 // require(['app/hello'], function(hello) {
 //     hello();

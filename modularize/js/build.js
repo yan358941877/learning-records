@@ -9,11 +9,14 @@
 // })
 ({
     baseUrl: ".",
+    name: "app",
     path: {
-
+        lib: 'lib',
+        app: 'app',
+        jquery: 'lib/jquery'
     },
     // name指明了从哪个js文件开始解析
-    name: "app",
+
     // 输出目录
     out: "index.merge.min.js"
 })
