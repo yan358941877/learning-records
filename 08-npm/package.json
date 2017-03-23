@@ -1,0 +1,14 @@
+{
+  "name": "yanxintest",
+  "version": "1.0.11",
+  "description": "test npm",
+  "main": "index.js",
+  "bin": {
+		"sayhello": "./bin/sayhello"
+	},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yanxin",
+  "license": "ISC"
+}
