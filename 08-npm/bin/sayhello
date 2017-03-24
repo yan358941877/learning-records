@@ -1,3 +1,13 @@
 #!/usr/bin/env node
 
-console.log("hello npm!");
+//console.log("hello npm!");
+
+var http=require('http');  
+//get 请求外网  
+http.get('http://api.jirengu.com/weather.php',function(req,res){  
+ 
+    
+    console.log("Got response: " + res);
+
+   
+});  
