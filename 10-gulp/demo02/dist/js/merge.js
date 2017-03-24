@@ -1,0 +1,1 @@
+var i=10,array=new Array(10);for(i=0;i<10;i++)array.push(i);var k=0,arr=[1,2,3,4,5,6,7,8,9,0];arr.forEach(function(r){console.log(r)});
