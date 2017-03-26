@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+    <!-- 使用模板语句将不同的js文件插入到不同的位置,
+    当使用模板文件生成index.html文件后,这里的js文件的路径是是以生成index.html的路径为基准的,即js/xxxxx.js,
+    如果想要发布上线,需要在这些文件头部加上域名相关的信息,如何快捷添加域名信息呢? 在webpack.config.js中的output中指定publicPath,则这些路径会自动在头部添加
+    publicPath中指定的域名信息 -->
+    <!--<script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>-->
+</head>
+
+<body>
+    <!--<%= htmlWebpackPlugin.options.date %>
+        <% for(var key in htmlWebpackPlugin.files) { %>
+            <%= key %> :
+                <%= JSON.stringify(htmlWebpackPlugin.files[key]) %>
+
+                    <% } %>
+
+                        <% for(var key in htmlWebpackPlugin.options) { %>
+                            <%= key %> :
+                                <%= JSON.stringify(htmlWebpackPlugin.options[key]) %>
+
+                                    <% } %>-->
+    <!--<script src="<%= htmlWebpackPlugin.files.chunks.a.entry %>"></script>-->
+    <!--当通过一个模板来构建多个页面,每个页面需要包含不同的js文件,这里不能指定为固定的a.entry,否则每个页面生成的这部分都是相同的-->
+
+
+</body>
+
+</html>
