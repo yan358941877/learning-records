@@ -6,11 +6,18 @@
     <title>
         <%= htmlWebpackPlugin.options.title %>
     </title>
+    <script>
+        <%= compilation.assets[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
+    </script>
+</head>
 
+<body>
+    <% for(var k in htmlWebpackPlugin.files.chunks) {%>
+        <% if(k!=='main'){ %>
+            <scirpt type="text/javascirpt" src="<%= htmlWebpackPlugin.files.chunks[k].entry %>"></scirpt>
+            <% } %>
+                <% } %>
 
-    <body>
-
-
-    </body>
+</body>
 
 </html>
